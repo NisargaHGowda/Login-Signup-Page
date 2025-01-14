@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import LoginPage from "./Components/LoginPage/LoginPage";

@@ -2,7 +2,6 @@
   "name": "login-page",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://https://NisargaHGowda.github.io/Login-Signup-Page",
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@react-oauth/google": "^0.12.1",
@@ -12,14 +11,14 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "^5.0.1",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^4.2.4",
+    "redirect_uri": "https://abc123.ngrok.io/oauth2callback"
+    
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
