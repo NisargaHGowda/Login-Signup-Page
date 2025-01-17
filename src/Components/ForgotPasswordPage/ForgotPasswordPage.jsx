@@ -1,8 +1,14 @@
 
-// import React from "react";
+// import React, { useState } from "react";
 // import "./ForgotPasswordPage.css"; // Ensure you add this CSS file for styling
 
 // const ForgotPasswordPage = () => {
+//   const [message, setMessage] = useState("");
+
+//   const handleResetLink = () => {
+//     setMessage("Sent an email to reset your password!");
+//   };
+
 //   return (
 //     <div className="container">
 //       <div className="header">
@@ -15,8 +21,11 @@
 //         </div>
 //       </div>
 //       <div className="submit-container">
-//         <button className="submit">Send Reset Link</button>
+//         <button className="submit" onClick={handleResetLink}>
+//           Send Reset Link
+//         </button>
 //       </div>
+//       {message && <div className="message">{message}</div>}
 //     </div>
 //   );
 // };
@@ -24,13 +33,23 @@
 // export default ForgotPasswordPage;
 
 import React, { useState } from "react";
-import "./ForgotPasswordPage.css"; // Ensure you add this CSS file for styling
+import axios from "axios"; // Add Axios for API requests
+import "./ForgotPasswordPage.css";
 
 const ForgotPasswordPage = () => {
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleResetLink = () => {
-    setMessage("Sent an email to reset your password!");
+  const handleResetLink = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/send-reset-email", {
+        email,
+      });
+      setMessage(response.data); // Display success message
+    } catch (error) {
+      setMessage("Failed to send email. Please try again.");
+      console.error(error);
+    }
   };
 
   return (
@@ -41,7 +60,13 @@ const ForgotPasswordPage = () => {
       </div>
       <div className="inputs">
         <div className="input">
-          <input type="email" placeholder="Enter your email" required />
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
       </div>
       <div className="submit-container">
@@ -55,4 +80,3 @@ const ForgotPasswordPage = () => {
 };
 
 export default ForgotPasswordPage;
-

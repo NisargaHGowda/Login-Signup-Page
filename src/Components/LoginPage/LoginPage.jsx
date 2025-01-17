@@ -1,86 +1,8 @@
-// import React, { useState } from "react";
-// import { GoogleLogin } from "@react-oauth/google";
-// import { Link } from "react-router-dom"; 
-// import "./LoginPage.css";
-
-// import user_icon from "../Assets/person.png";
-// import email_icon from "../Assets/email.png";
-// import password_icon from "../Assets/password.png";
-
-// const LoginPage = () => {
-//   const [action, setAction] = useState("Login");
-
-//   const handleLoginSuccess = (credentialResponse) => {
-//     console.log("Login Success:", credentialResponse);
-//     alert("Login successful!");
-//   };
-
-//   const handleLoginFailure = () => {
-//     alert("Login failed. Please try again.");
-//   };
-
-//   return (
-//     <div className="container">
-//       <div className="header">
-//         <div className="text">{action}</div>
-//         <div className="underline"></div>
-//       </div>
-//       <div className="inputs">
-//         {action === "Login" ? null : (
-//           <div className="input">
-//             <img src={user_icon} alt="" />
-//             <input type="text" placeholder="Name" />
-//           </div>
-//         )}
-//         <div className="input">
-//           <img src={email_icon} alt="" />
-//           <input type="email" placeholder="Email Id" />
-//         </div>
-//         <div className="input">
-//           <img src={password_icon} alt="" />
-//           <input type="password" placeholder="Password" />
-//         </div>
-//       </div>
-//       {action === "Sign Up" ? null : (
-//         <div className="forgot-password">
-//           Forgot password? <Link to="/forgot-password">Click Here!</Link>
-//         </div>
-//       )}
-//       <div className="submit-container">
-//         <div
-//           className={action === "Login" ? "submit gray" : "submit"}
-//           onClick={() => setAction("Sign Up")}
-//         >
-//           Sign up
-//         </div>
-//         <div
-//           className={action === "Sign Up" ? "submit gray" : "submit"}
-//           onClick={() => setAction("Login")}
-//         >
-//           Login
-//         </div>
-//       </div>
-
-//       {/* Google Login Button */}
-//       <div className="google-login">
-//         <GoogleLogin onSuccess={handleLoginSuccess} onError={handleLoginFailure} />
-//       </div>
-
-//       {/* Sign Up prompt below Google Login */}
-//       <div className="signup-prompt">
-//         Don't have an account?
-//         <br />
-//         Click on Signup
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default LoginPage;
 
 import React, { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
+import axios from "axios"; // Import axios
 import "./LoginPage.css";
 
 import user_icon from "../Assets/person.png";
@@ -112,16 +34,35 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (formData.name && formData.email && formData.password) {
-      alert(`Created your account, ${formData.name}!`);
-      setFormData({ name: "", email: "", password: "" }); // Clear form
-      setAction("Login"); // Switch back to Login page
+      try {
+        await axios.post("http://localhost:5000/signup", formData);
+        alert(`Created your account, ${formData.name}!`);
+        setFormData({ name: "", email: "", password: "" }); // Clear form
+        setAction("Login"); // Switch back to Login page
+      } catch (error) {
+        alert("Sign up failed. Please try again.");
+        console.error(error);
+      }
     } else {
       alert("Please fill in all fields to create your account.");
     }
   };
 
+  const handleLogin = async () => {
+    try {
+      await axios.post("http://localhost:5000/login", {
+        email: formData.email,
+        password: formData.password,
+      });
+      alert("Login successful!"); // Show success message
+    } catch (error) {
+      alert("Login failed. Please try again.");
+      console.error(error);
+    }
+  };
+  
   return (
     <div className="container">
       <div className="header">
@@ -175,16 +116,9 @@ const LoginPage = () => {
         ) : (
           <div
             className="submit"
-            onClick={() => {
-              setAction("Sign Up");
-            }}
+            onClick={handleLogin}
           >
-            Sign up
-          </div>
-        )}
-        {action === "Login" && (
-          <div className="submit" onClick={() => alert("Logging in...")}>
-            Login
+            Login 
           </div>
         )}
       </div>
@@ -194,10 +128,19 @@ const LoginPage = () => {
       </div>
 
       <div className="signup-prompt">
-        Don't have an account? <span onClick={() => setAction("Sign Up")}>Sign up</span>
+        {action === "Login" ? (
+          <>
+            Don't have an account? <span onClick={() => setAction("Sign Up")}>Sign up</span>
+          </>
+        ) : (
+          <>
+            Already have an account? <span onClick={() => setAction("Login")}>Login</span>
+          </>
+        )}
       </div>
     </div>
   );
 };
 
 export default LoginPage;
+

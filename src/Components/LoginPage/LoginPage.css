@@ -117,5 +117,11 @@
   cursor: pointer;
 }
 
+.signup-prompt span {
+  cursor: pointer;
+  color: red;
+  text-decoration: underline;
+}
+
 
 
