@@ -1,8 +1,6 @@
-
 import React, { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
-import axios from "axios"; // Import axios
 import "./LoginPage.css";
 
 import user_icon from "../Assets/person.png";
@@ -37,7 +35,7 @@ const LoginPage = () => {
   const handleSignUp = async () => {
     if (formData.name && formData.email && formData.password) {
       try {
-        await axios.post("http://localhost:5000/signup", formData);
+        // await axios.post("http://localhost:5000/signup", formData);
         alert(`Created your account, ${formData.name}!`);
         setFormData({ name: "", email: "", password: "" }); // Clear form
         setAction("Login"); // Switch back to Login page
@@ -52,10 +50,10 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      await axios.post("http://localhost:5000/login", {
-        email: formData.email,
-        password: formData.password,
-      });
+      // await axios.post("http://localhost:5000/login", {
+      //   email: formData.email,
+      //   password: formData.password,
+      // });
       alert("Login successful!"); // Show success message
     } catch (error) {
       alert("Login failed. Please try again.");
